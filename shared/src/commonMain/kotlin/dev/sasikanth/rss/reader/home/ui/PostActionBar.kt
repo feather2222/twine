@@ -68,6 +68,7 @@ import dev.sasikanth.rss.reader.platform.LocalLinkHandler
 import dev.sasikanth.rss.reader.resources.icons.Bookmark
 import dev.sasikanth.rss.reader.resources.icons.Bookmarked
 import dev.sasikanth.rss.reader.resources.icons.Comments
+import dev.sasikanth.rss.reader.resources.icons.MarkAllAsRead
 import dev.sasikanth.rss.reader.resources.icons.MoreHorizFilled
 import dev.sasikanth.rss.reader.resources.icons.Platform
 import dev.sasikanth.rss.reader.resources.icons.Share
@@ -90,6 +91,7 @@ import twine.shared.generated.resources.bookmark
 import twine.shared.generated.resources.comments
 import twine.shared.generated.resources.markAsRead
 import twine.shared.generated.resources.markAsUnRead
+import twine.shared.generated.resources.markPreviousAsRead
 import twine.shared.generated.resources.moreMenuOptions
 import twine.shared.generated.resources.openWebsite
 import twine.shared.generated.resources.readingTimeEstimate
@@ -122,6 +124,8 @@ internal fun PostActionBar(
   onDropdownChange: (Boolean) -> Unit = {},
   config: PostMetadataConfig = PostMetadataConfig.DEFAULT,
   onSourceClick: () -> Unit,
+  showMarkPreviousAsRead: Boolean = false,
+  onMarkPreviousAsRead: () -> Unit = {},
 ) {
   val colorScheme = AppTheme.colorScheme
   Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
@@ -193,6 +197,8 @@ internal fun PostActionBar(
       onBookmarkClick = onBookmarkClick,
       onCommentsClick = onCommentsClick,
       togglePostReadClick = onTogglePostReadClick,
+      showMarkPreviousAsRead = showMarkPreviousAsRead,
+      onMarkPreviousAsRead = onMarkPreviousAsRead,
     )
   }
 }
@@ -334,6 +340,8 @@ internal fun PostActions(
   onDropdownChange: (Boolean) -> Unit = {},
   onBookmarkClick: () -> Unit,
   onCommentsClick: () -> Unit,
+  showMarkPreviousAsRead: Boolean = false,
+  onMarkPreviousAsRead: () -> Unit = {},
   togglePostReadClick: () -> Unit,
 ) {
   Row(
@@ -401,6 +409,8 @@ internal fun PostActions(
           coroutineScope = coroutineScope,
           onDropdownChange = onDropdownChange,
           togglePostReadClick = togglePostReadClick,
+          showMarkPreviousAsRead = showMarkPreviousAsRead,
+          onMarkPreviousAsRead = onMarkPreviousAsRead,
         )
       }
     }
@@ -423,6 +433,8 @@ internal fun PostActionsContextMenu(
   modifier: Modifier = Modifier,
   alwaysShowMarkAsUnread: Boolean = false,
   hideMarkAsOptions: Boolean = false,
+  showMarkPreviousAsRead: Boolean = false,
+  onMarkPreviousAsRead: () -> Unit = {},
 ) {
   val coroutineScope = rememberCoroutineScope()
 
@@ -440,6 +452,8 @@ internal fun PostActionsContextMenu(
       coroutineScope = coroutineScope,
       onDropdownChange = { if (!it) onDismissRequest() },
       togglePostReadClick = togglePostReadClick,
+      showMarkPreviousAsRead = showMarkPreviousAsRead,
+      onMarkPreviousAsRead = onMarkPreviousAsRead,
     )
   }
 }
@@ -454,6 +468,8 @@ private fun PostActionsMenuItems(
   coroutineScope: CoroutineScope,
   onDropdownChange: (Boolean) -> Unit,
   togglePostReadClick: () -> Unit,
+  showMarkPreviousAsRead: Boolean,
+  onMarkPreviousAsRead: () -> Unit,
 ) {
   if (config.showToggleReadUnreadOption && !hideMarkAsOptions) {
     val markAsReadLabel =
@@ -477,6 +493,23 @@ private fun PostActionsMenuItems(
         coroutineScope.launch {
           onDropdownChange(false)
           togglePostReadClick()
+        }
+      },
+    )
+  }
+
+  if (showMarkPreviousAsRead) {
+    val markPreviousAsReadLabel = stringResource(Res.string.markPreviousAsRead)
+
+    DropdownMenuItem(
+      modifier = Modifier.fillMaxWidth(),
+      leadingIcon = TwineIcons.MarkAllAsRead,
+      text = markPreviousAsReadLabel,
+      contentDescription = markPreviousAsReadLabel,
+      onClick = {
+        coroutineScope.launch {
+          onDropdownChange(false)
+          onMarkPreviousAsRead()
         }
       },
     )

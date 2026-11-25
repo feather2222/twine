@@ -84,6 +84,7 @@ internal fun PostsList(
   onPostCommentsClick: (String) -> Unit,
   onPostSourceClick: (String) -> Unit,
   updateReadStatus: (String, Boolean) -> Unit,
+  onMarkPreviousPostsAsRead: (postIds: Set<String>) -> Unit,
   modifier: Modifier = Modifier,
   activeReaderPostId: String? = null,
   selectedPostIndex: Int = -1,
@@ -196,6 +197,8 @@ internal fun PostsList(
             reduceReadItemAlpha = true,
             contentPadding = listItemPadding,
             blockImages = blockImages,
+            showMarkPreviousAsRead = index > 0,
+            onMarkPreviousAsRead = { onMarkPreviousPostsAsRead(unreadPostIdsBefore(posts, index)) },
           )
         }
         HomeViewMode.Simple -> {
@@ -213,6 +216,8 @@ internal fun PostsList(
             reduceReadItemAlpha = true,
             contentPadding = listItemPadding,
             blockImages = blockImages,
+            showMarkPreviousAsRead = index > 0,
+            onMarkPreviousAsRead = { onMarkPreviousPostsAsRead(unreadPostIdsBefore(posts, index)) },
           )
         }
         HomeViewMode.Compact -> {
@@ -228,6 +233,8 @@ internal fun PostsList(
             },
             reduceReadItemAlpha = true,
             contentPadding = compactItemPadding,
+            showMarkPreviousAsRead = index > 0,
+            onMarkPreviousAsRead = { onMarkPreviousPostsAsRead(unreadPostIdsBefore(posts, index)) },
           )
         }
       }
@@ -268,6 +275,9 @@ private fun LazyItemScope.animatePostItem(): Modifier =
 
 internal fun postItemContentType(homeViewMode: HomeViewMode): String =
   "${POST_ITEM_CONTENT_TYPE}_${homeViewMode.name}"
+
+private fun unreadPostIdsBefore(posts: LazyPagingItems<ResolvedPost>, index: Int): Set<String> =
+  (0 until index).mapNotNull { position -> posts.peek(position)?.takeIf { !it.read }?.id }.toSet()
 
 private const val FADE_IN_DURATION = 220
 private const val FADE_OUT_DURATION = 160

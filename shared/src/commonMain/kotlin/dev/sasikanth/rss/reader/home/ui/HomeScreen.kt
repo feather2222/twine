@@ -733,6 +733,9 @@ private fun HomeContent(
                   updateReadStatus = { postId, updatedReadStatus ->
                     dispatch(HomeEvent.UpdatePostReadStatus(postId, updatedReadStatus))
                   },
+                  onMarkPreviousPostsAsRead = { postIds ->
+                    dispatch(HomeEvent.MarkPreviousPostsAsRead(postIds))
+                  },
                   activeReaderPostId = activeReaderPostId,
                   selectedPostIndex = selectedPostIndex,
                   modifier = listScrimModifier,

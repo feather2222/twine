@@ -154,6 +154,7 @@ class HomeViewModel(
         updatePostReadStatus(event.postId, event.updatedReadStatus)
       is HomeEvent.MarkPostsAsRead -> markPostsAsRead(event.source)
       is HomeEvent.MarkPostsAsReadByIds -> markPostsAsReadByIds(event.postIds)
+      is HomeEvent.MarkPreviousPostsAsRead -> markPreviousPostsAsRead(event.postIds)
       is HomeEvent.MarkFeaturedPostsAsRead -> markFeaturedPostAsRead(event.postId)
       is HomeEvent.OnVisiblePostsChanged ->
         onVisiblePostsChanged(event.visiblePosts, event.firstVisibleItemIndex)
@@ -217,6 +218,12 @@ class HomeViewModel(
 
   private fun markPostsAsReadByIds(postIds: Set<String>) {
     scrollReadPostsBuffer.enqueue(postIds)
+  }
+
+  private fun markPreviousPostsAsRead(postIds: Set<String>) {
+    if (postIds.isEmpty()) return
+
+    viewModelScope.launch { rssRepository.updatePostReadStatus(postIds = postIds, read = true) }
   }
 
   private fun onPostClicked(post: ResolvedPost) {

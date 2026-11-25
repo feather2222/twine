@@ -146,6 +146,7 @@
   <string name="postsLast24Hours">24H</string>
   <string name="markAsRead">Mark as read</string>
   <string name="markAsUnRead">Mark as unread</string>
+  <string name="markPreviousAsRead">Mark previous as read</string>
   <string name="removeFeed">Remove feed</string>
   <string name="delete">Delete</string>
   <string name="removeFeedDesc">Do you want to remove <b>"%1$s"</b>?</string>

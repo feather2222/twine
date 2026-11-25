@@ -129,6 +129,8 @@ internal fun PostListItem(
   postMetadataConfig: PostMetadataConfig = PostMetadataConfig.DEFAULT,
   contentPadding: PaddingValues = postListPadding,
   blockImages: Boolean = LocalBlockImage.current,
+  showMarkPreviousAsRead: Boolean = false,
+  onMarkPreviousAsRead: () -> Unit = {},
 ) {
   var readStatus by remember(item.read) { mutableStateOf(item.read) }
   val alpha by
@@ -230,6 +232,8 @@ internal fun PostListItem(
         onDropdownChange = { showDropdown = it },
         config = postMetadataConfig,
         onSourceClick = onPostSourceClick,
+        showMarkPreviousAsRead = showMarkPreviousAsRead,
+        onMarkPreviousAsRead = onMarkPreviousAsRead,
       )
     }
 
@@ -248,6 +252,8 @@ internal fun PostListItem(
             readStatus = !readStatus
             updatePostReadStatus(readStatus)
           },
+          showMarkPreviousAsRead = showMarkPreviousAsRead,
+          onMarkPreviousAsRead = onMarkPreviousAsRead,
         )
       }
     }
@@ -268,6 +274,8 @@ internal fun SimplePostListItem(
   postMetadataConfig: PostMetadataConfig = PostMetadataConfig.DEFAULT,
   contentPadding: PaddingValues = postListPadding,
   blockImages: Boolean = LocalBlockImage.current,
+  showMarkPreviousAsRead: Boolean = false,
+  onMarkPreviousAsRead: () -> Unit = {},
 ) {
   var readStatus by remember(item.read) { mutableStateOf(item.read) }
   val alpha by
@@ -356,6 +364,8 @@ internal fun SimplePostListItem(
         onDropdownChange = { showDropdown = it },
         config = postMetadataConfig,
         onSourceClick = onPostSourceClick,
+        showMarkPreviousAsRead = showMarkPreviousAsRead,
+        onMarkPreviousAsRead = onMarkPreviousAsRead,
       )
     }
 
@@ -374,6 +384,8 @@ internal fun SimplePostListItem(
             readStatus = !readStatus
             updatePostReadStatus(readStatus)
           },
+          showMarkPreviousAsRead = showMarkPreviousAsRead,
+          onMarkPreviousAsRead = onMarkPreviousAsRead,
         )
       }
     }
@@ -392,6 +404,8 @@ internal fun CompactPostListItem(
   highlighted: Boolean = false,
   postMetadataConfig: PostMetadataConfig = PostMetadataConfig.DEFAULT,
   contentPadding: PaddingValues = compactPostListPadding,
+  showMarkPreviousAsRead: Boolean = false,
+  onMarkPreviousAsRead: () -> Unit = {},
 ) {
   var readStatus by remember(item.read) { mutableStateOf(item.read) }
   val alpha by
@@ -507,6 +521,8 @@ internal fun CompactPostListItem(
             readStatus = !readStatus
             updatePostReadStatus(readStatus)
           },
+          showMarkPreviousAsRead = showMarkPreviousAsRead,
+          onMarkPreviousAsRead = onMarkPreviousAsRead,
         )
       }
     }

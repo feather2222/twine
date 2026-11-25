@@ -43,6 +43,8 @@ sealed interface HomeEvent {
 
   data class MarkPostsAsReadByIds(val postIds: Set<String>) : HomeEvent
 
+  data class MarkPreviousPostsAsRead(val postIds: Set<String>) : HomeEvent
+
   data class MarkFeaturedPostsAsRead(val postId: String) : HomeEvent
 
   data class OnVisiblePostsChanged(
